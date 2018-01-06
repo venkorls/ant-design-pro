@@ -2,16 +2,18 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Tooltip } from 'antd';
 import numeral from 'numeral';
-
+import Authorized from '../../utils/Authorized';
 import { Pie, WaterWave, Gauge, TagCloud } from '../../components/Charts';
 import NumberInfo from '../../components/NumberInfo';
 import CountDown from '../../components/CountDown';
 import ActiveChart from '../../components/ActiveChart';
-
 import styles from './Monitor.less';
+
+const { Secured } = Authorized;
 
 const targetTime = new Date().getTime() + 3900000;
 
+@Secured('admin')
 @connect(state => ({
   monitor: state.monitor,
 }))
@@ -46,10 +48,7 @@ export default class Monitor extends PureComponent {
                   />
                 </Col>
                 <Col md={6} sm={12} xs={24}>
-                  <NumberInfo
-                    subTitle="活动剩余时间"
-                    total={<CountDown target={targetTime} />}
-                  />
+                  <NumberInfo subTitle="活动剩余时间" total={<CountDown target={targetTime} />} />
                 </Col>
                 <Col md={6} sm={12} xs={24}>
                   <NumberInfo
@@ -106,7 +105,7 @@ export default class Monitor extends PureComponent {
               bordered={false}
               className={styles.pieCard}
             >
-              <Row gutter={4} style={{ padding: '16px 0' }}>
+              <Row style={{ padding: '16px 0' }}>
                 <Col span={8}>
                   <Pie
                     animate={false}
